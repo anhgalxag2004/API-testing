@@ -25,9 +25,9 @@ jobs:
 
     - name: Run Postman Collection
       run: |
-        newman run tests/postman/Toolshop-API-Collection.json \
-          -e tests/postman/Toolshop-Env.json \
-          -d tests/postman/testdata.csv \
+        newman run tests/postman/Toolshop-API-Collection.postman_collection.json \
+          -e tests/postman/Toolshop-Env.postman_environment.json \
+          -d tests/postman/data.csv \
           -r cli,htmlextra \
           --reporter-htmlextra-export test-report.html
 
