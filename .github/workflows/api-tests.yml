@@ -1,0 +1,38 @@
+name: Run API Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch: # cho phép chạy tay
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-htmlextra
+
+    - name: Run Postman Collection
+      run: |
+        newman run tests/postman/Toolshop-API-Collection.json \
+          -e tests/postman/Toolshop-Env.json \
+          -d tests/postman/testdata.csv \
+          -r cli,htmlextra \
+          --reporter-htmlextra-export test-report.html
+
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: postman-test-report
+        path: test-report.html
